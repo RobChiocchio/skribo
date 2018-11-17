@@ -3,7 +3,8 @@ const writePath = require("os").homedir() + '/Documents/skribo.txt';
 
 var quill = new Quill('#editor', {
     modules: {
-        syntax: false
+        syntax: false,
+        toolbar: null
     },
     formats: {
         bold: true,

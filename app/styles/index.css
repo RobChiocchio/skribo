@@ -30,7 +30,7 @@ body {
 #titlebar {
 	-webkit-user-select: none;
 	-webkit-app-region: drag;
-	height: 32px;
+	height: 16px;
 	padding: 0px;
 	margin: 0px;
 	overflow: hidden;
