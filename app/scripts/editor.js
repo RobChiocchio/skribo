@@ -1,4 +1,5 @@
 const fs = require("fs"); //filesystem
+const writePath = require("os").homedir() + '/Documents/skribo.txt';
 
 var quill = new Quill('#editor', {
     modules: {
@@ -12,9 +13,9 @@ var quill = new Quill('#editor', {
     theme: 'bubble'
 });
 
-fs.readFile('skribo.txt', "utf8", function(err, data){
+fs.readFile(writePath, "utf8", function(err, data){
     if (err) {
-        quill.setText("Hi!");
+        quill.setText("Hello, world!");
         return console.error(err);
     } else {
         quill.setText(data);
@@ -25,7 +26,7 @@ quill.on('text-change', function(delta, oldDelta, source) {
     if (source == 'api') {
         console.log("An API call triggered this change.");
     } else if (source == 'user') {
-        fs.writeFile('skribo.txt', document.getElementById("editor").textContent, function(err, data){ //should this be synchronous instead?
+        fs.writeFile(writePath, document.getElementById("editor").textContent, function(err, data){ //should this be synchronous instead?
             if (err) {
                 return console.error(err);
             }

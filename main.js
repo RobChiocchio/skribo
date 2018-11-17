@@ -29,7 +29,7 @@ function createWindow () {
     });
 }
 
-  app.on('ready', createWindow); // called when Electron has finished initialization
+app.on('ready', createWindow); // called when Electron has finished initialization
 
   
 app.on('window-all-closed', function () { // Quit when all windows are closed.
