@@ -1,0 +1,28 @@
+{
+  "name": "skribo",
+  "version": "1.0.0",
+  "description": "skribo",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron ."
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/robethx/skribo.git"
+  },
+  "keywords": [
+    "skribo"
+  ],
+  "author": "Rob Chiocchio",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/robethx/skribo/issues"
+  },
+  "homepage": "https://github.com/robethx/skribo#readme",
+  "dependencies": {
+    "quill": "^1.3.6"
+  },
+  "devDependencies": {
+    "electron": "^3.0.9"
+  }
+}

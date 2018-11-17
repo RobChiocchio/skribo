@@ -1,0 +1,80 @@
+/*
+Palette: 
+Light grey: #f5f6fa, #dcdde1
+Blue grey: #7f8fa6, #718093
+Dark grey: #353b48, #2f3640
+*/
+
+::-webkit-scrollbar { 
+    display: none; 
+}
+
+html, body {
+	font-family: 'Ubuntu', -apple-system, 'Roboto', 'Helvetica Neue', Helvetica, sans-serif;
+	padding: 0;
+	margin: 0;
+	height: 100%;
+	overflow: hidden;
+}
+
+body {
+	position: static;
+	background: #353b48;
+	color: #f5f6fa;
+}
+
+#editor {
+	position: absolute;
+	padding: 0px;
+	margin: 0px;
+	width: 100%;
+	height: 100%;
+	bottom: 0px;
+	overflow-y: scroll;
+	font-size: 16px;
+	color: #7f8fa6;
+}
+
+#titlebar {
+	-webkit-user-select: none;
+	-webkit-app-region: drag;
+	height: 32px;
+	padding: 0px;
+	margin: 0px;
+	color: #7f8fa6;
+	overflow: hidden;
+}
+
+#titlebar-buttons {
+	-webkit-app-region: no-drag;
+	position: fixed;
+	right: 0px;
+	margin: auto;
+}
+
+#titlebar-buttons button {
+	height: 32px;
+	width: 32px;
+	border: none;
+	outline: 0px;
+	background: transparent;
+	color: #7f8fa6;
+	text-align: center;
+	font-size: 16px;
+}
+
+#titlebar-buttons button:hover {
+	background: #2f3640;
+}
+
+.element {
+	width: 100%;
+	height: 40px;
+	margin-top: 5px;
+	margin-bottom: 5px;
+	background: #718093;
+	color: #f5f6fa;
+	border: none;
+	outline: 0px;
+	font-size: 16px;
+}
