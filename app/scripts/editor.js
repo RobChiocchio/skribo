@@ -18,7 +18,7 @@ fs.readFile(writePath, "utf8", function(err, data){
         quill.setText("Hello, world!");
         return console.error(err);
     } else {
-        quill.setText(data);
+        quill.setText(data.trim());
     }
 })
 
