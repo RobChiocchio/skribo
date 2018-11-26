@@ -4,34 +4,80 @@ const electron = require('electron');
 const app = electron.app; // control app
 const BrowserWindow = electron.BrowserWindow; // create native browser window
 const ipcMain = electron.ipcMain;
+const fs = require('fs');
+const path = require('path');
 
-let mainWindow;
+let notesPath = path.join(app.getPath("userData"), "notes");
+console.log(notesPath);
+var windows = [];
 
-function createWindow () {
-    mainWindow = new BrowserWindow({
-        width: 475,
-        height: 615,
-        minWidth: 200,
-        minHeight: 150,
-        frame: false, // remove frame from windows apps
-        titleBarStyle: 'hidden' // hide mac titlebar
-    });
-  
-    mainWindow.setIcon
-    
-    mainWindow.loadFile('app/index.html');
-  
-    //mainWindow.webContents.openDevTools(); // Open the DevTools.
-  
-    
-    mainWindow.on('closed', function () { // Emitted when the window is closed.
-        mainWindow = null;
-    });
+if (!fs.existsSync(notesPath)){ //if notesPath does not exist
+    fs.mkdirSync(notesPath, true); //create directory recursively
 }
 
-app.on('ready', createWindow); // called when Electron has finished initialization
+function createWindow(notePath = null) {
+    let window = new BrowserWindow({
+        width: 300,
+        height: 250,
+        minWidth: 150,
+        minHeight: 125,
+        frame: false, // remove frame from windows apps
+        titleBarStyle: 'hidden', // hide mac titlebar
+        transparent: true, //allow rounded corners
+        icon: '',
+    });
 
+    window.loadFile('index.html');
   
+    //window.webContents.openDevTools(); // Open the DevTools.
+  
+    window.on('closed', function () { // Emitted when the window is closed.
+        window = null;
+        //pop window?
+    });
+
+    if (notePath == null) {
+        notePath = path.join(notesPath, (windows.length + 1).toString() + ".txt");
+    }
+
+    window.webContents.on('did-finish-load', () => {
+        window.webContents.send("loadFile", notePath); // send the note's path to the note
+    });
+
+    console.log("Opening note " + notePath);
+    windows.push(window);
+}
+
+function createWindows() { //initialize
+    fs.readdir(notesPath, (err, files) => {
+        if (files == undefined || files.length <= 0) {
+            createWindow();
+        } else {
+            files.forEach(file => {
+                createWindow(path.join(notesPath, file));
+            });
+        }
+    });
+
+    //if no files found, create a window anyways?
+}
+
+ipcMain.on("closeAll", (event, arg) => {
+    windows.forEach(window => {
+        window.close();
+    });
+
+    app.quit();
+});
+
+ipcMain.on("newNote", function(){
+    createWindow();
+});
+
+app.on('ready', function () { // called when Electron has finished initialization
+    createWindows();
+});
+
 app.on('window-all-closed', function () { // Quit when all windows are closed.
     if (process.platform !== 'darwin') { // OSX quit fix
         app.quit();
@@ -39,7 +85,7 @@ app.on('window-all-closed', function () { // Quit when all windows are closed.
 });
 
 app.on('activate', function () {
-    if (mainWindow === null) { //mac fix
-    createWindow();
+    if (windows.length <= 0) { //if no existing notes found
+        createWindows();
     }
 });

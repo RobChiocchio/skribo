@@ -74,3 +74,10 @@ typings/
 
 # FuseBox cache
 .fusebox/
+
+# Lockfiles
+**/package-lock.json
+**/yarn.lock
+
+# Build output
+dist/
