@@ -15,6 +15,8 @@ contextMenu.append(new MenuItem({label: 'Copy', role: 'copy' }));
 contextMenu.append(new MenuItem({label: 'Paste', role: 'paste' }));
 contextMenu.append(new MenuItem({type: 'separator'}))
 contextMenu.append(new MenuItem({label: 'Select all', role: 'selectall' }));
+contextMenu.append(new MenuItem({type: 'separator'}))
+contextMenu.append(new MenuItem({label: 'Insert Equation', enabled: false })); // TODO: add KATEX and/or MathQuill support!
 
 var optionsMenu = new Menu();
 optionsMenu.append(new MenuItem({label: 'Pin note', click() { pinNote(); }, id: "isNotePinned", checked: false }));
@@ -89,6 +91,7 @@ function newNote() {
 }
 
 function deleteNote() {
+    // TODO: add prompt to confirm deletion!
     try {
         fs.unlinkSync(notePath); // delete the note
     } catch (err) {

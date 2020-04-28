@@ -25,6 +25,7 @@ function createWindow(notePath = null) {
         titleBarStyle: 'hidden', // hide mac titlebar
         transparent: true, //allow rounded corners
         icon: '',
+        // TODO: add JSON file that stores note position and other properties
     });
 
     window.loadFile('index.html');
@@ -37,7 +38,7 @@ function createWindow(notePath = null) {
     });
 
     if (notePath == null) {
-        notePath = path.join(notesPath, (windows.length + 1).toString() + ".txt");
+        notePath = path.join(notesPath, (windows.length + 1).toString() + ".txt"); // TODO: fix this!!! windows.length + 1 doesnt work!! if a note is closed it will screw up everything!!
     }
 
     window.webContents.on('did-finish-load', () => {
