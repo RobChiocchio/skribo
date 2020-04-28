@@ -4,7 +4,7 @@ const ipcRenderer = electron.ipcRenderer;
 const fs = require("fs"); //filesystem
 const {Menu, MenuItem} = remote
 
-var notePath = ""; //const notePath = require("os").homedir() + '/Documents/skribo.txt';
+var notePath = "";
 
 const contextMenu = new Menu();
 contextMenu.append(new MenuItem({label: 'Undo', role: 'undo' }));
@@ -16,9 +16,10 @@ contextMenu.append(new MenuItem({label: 'Paste', role: 'paste' }));
 contextMenu.append(new MenuItem({type: 'separator'}))
 contextMenu.append(new MenuItem({label: 'Select all', role: 'selectall' }));
 
-const optionsMenu = new Menu();
-optionsMenu.append(new MenuItem({label: 'Close all', click() { closeAll(); }}));
+var optionsMenu = new Menu();
+optionsMenu.append(new MenuItem({label: 'Pin note', click() { pinNote(); }, id: "isNotePinned", checked: false }));
 optionsMenu.append(new MenuItem({label: 'Close note', click() { closeNote(); }}));
+optionsMenu.append(new MenuItem({label: 'Close all', click() { closeAll(); }}));
 optionsMenu.append(new MenuItem({label: 'Delete note', click() { deleteNote() }}));
 
 ipcRenderer.on("loadFile", (event, arg) => {
@@ -66,6 +67,13 @@ quill.on('text-change', function(delta, oldDelta, source) {
         });
     }
 });
+
+function pinNote() {
+    const window = remote.getCurrentWindow();
+    let isNotePinned = !window.isAlwaysOnTop();
+    window.setAlwaysOnTop(isNotePinned);
+    //optionsMenu.getMenuItemById("isNotePinned").checked = isNotePinned; // TODO: Doesn't update automatically, fix
+}
 
 function closeNote() {
     const window = remote.getCurrentWindow();

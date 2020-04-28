@@ -64,7 +64,11 @@ function createWindows() { //initialize
 
 ipcMain.on("closeAll", (event, arg) => {
     windows.forEach(window => {
-        window.close();
+        try {
+            window.close();
+        } catch (e) {
+            console.error(e);
+        }
     });
 
     app.quit();
