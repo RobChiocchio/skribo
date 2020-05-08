@@ -6,7 +6,7 @@ var palettes = [ //text color, background color, select color
 function applyRandomTheme() {
     var palette = palettes[Math.floor(Math.random()*palettes.length)];
     document.getElementById("buttonClose").color = palette[0];
-    var body = document.getElementById("body")
+    var body = document.getElementById("body");
     body.style.color = palette[0];
     body.style.background = palette[1];
 }

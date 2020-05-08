@@ -4,13 +4,15 @@
         <meta charset="UTF-8">
         <title>skribo</title>
         <link rel="stylesheet" href="styles/index.css">
-        <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
-        <link href="https://cdn.quilljs.com/1.3.6/quill.bubble.css" rel="stylesheet">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.css" crossorigin="anonymous">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/quill@1.3.6/dist/quill.snow.css" crossorigin="anonymous">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/quill@1.3.6/dist/quill.bubble.css" crossorigin="anonymous">
     </head>
     <body id="body">
         <div id="editor"></div>
         <div id="titlebar">
             <div id="titlebar-buttons">
+                <!-- <button class="ql-formula">&#119891;</button> -->
                 <button id="buttonOptions">&#8943;</button>
                 <button id="buttonNewNote">&#65291;</button>
                 <!-- <button id="buttonClose">&#128473;</button> -->
@@ -18,6 +20,7 @@
         </div>
     </body>
     <script src="scripts/theme.js"></script>
-    <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/quill@1.3.7/dist/quill.min.js" crossorigin="anonymous"></script>
     <script src="renderer.js"></script>
 </html>

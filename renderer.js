@@ -1,7 +1,8 @@
-const electron = require('electron');
+const electron = require("electron");
 const remote = electron.remote;
 const ipcRenderer = electron.ipcRenderer;
 const fs = require("fs"); //filesystem
+const katex = require("katex");
 const {Menu, MenuItem} = remote
 
 var notePath = "";
@@ -16,13 +17,28 @@ contextMenu.append(new MenuItem({label: 'Paste', role: 'paste' }));
 contextMenu.append(new MenuItem({type: 'separator'}))
 contextMenu.append(new MenuItem({label: 'Select all', role: 'selectall' }));
 contextMenu.append(new MenuItem({type: 'separator'}))
-contextMenu.append(new MenuItem({label: 'Insert Equation', enabled: false })); // TODO: add KATEX and/or MathQuill support!
+contextMenu.append(new MenuItem({label: 'Insert formula', click() { addFormula(); } })); // TODO: add KATEX and/or MathQuill support!
 
 var optionsMenu = new Menu();
 optionsMenu.append(new MenuItem({label: 'Pin note', click() { pinNote(); }, id: "isNotePinned", checked: false }));
 optionsMenu.append(new MenuItem({label: 'Close note', click() { closeNote(); }}));
 optionsMenu.append(new MenuItem({label: 'Close all', click() { closeAll(); }}));
 optionsMenu.append(new MenuItem({label: 'Delete note', click() { deleteNote() }}));
+
+var quill = new Quill("#editor", {
+    modules: {
+        syntax: false,
+        formula: true,
+        toolbar: null
+    },
+    formats: {
+        bold: true,
+        size: false,
+        link: false,
+        formula: true
+    },
+    theme: "bubble"
+});
 
 ipcRenderer.on("loadFile", (event, arg) => {
     notePath = arg;
@@ -45,30 +61,22 @@ ipcRenderer.on("loadFile", (event, arg) => {
     })
 });
 
-var quill = new Quill('#editor', {
-    modules: {
-        syntax: false,
-        toolbar: null
-    },
-    formats: {
-        bold: true,
-        size: false,
-        link: false
-    },
-    theme: 'bubble'
-});
-
 quill.on('text-change', function(delta, oldDelta, source) {
     if (source == 'api') {
         console.log("An API call triggered this change.");
     } else if (source == 'user') {
-        fs.writeFile(notePath, document.getElementById("editor").textContent, function(err, data){ //should this be synchronous instead?
+        fs.writeFile(notePath, quill.getText(), function(err, data){ //should this be synchronous instead?
             if (err) {
                 return console.error(err);
             }
         });
     }
 });
+
+function addFormula() {
+    quill.tooltip.show();
+    //quill.tooltip.edit("formula");
+}
 
 function pinNote() {
     const window = remote.getCurrentWindow();
