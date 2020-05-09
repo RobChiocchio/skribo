@@ -1,4 +1,4 @@
-'use strict'; // don't ignore bad code
+"use strict"; // don't ignore bad code
 
 const electron = require("electron");
 const app = electron.app; // control app
@@ -8,7 +8,7 @@ const fs = require("fs");
 const path = require("path");
 
 let notesPath = path.join(app.getPath("userData"), "notes");
-console.log(notesPath);
+let configPath = path.join(app.getPath("userData"), "config.json");
 var windows = [];
 var windowNames = [];
 
@@ -23,19 +23,19 @@ function createWindow(notePath = null) {
         minWidth: 150,
         minHeight: 125,
         frame: false, // remove frame from windows apps
-        titleBarStyle: 'hidden', // hide mac titlebar
+        titleBarStyle: "hidden", // hide mac titlebar
         transparent: true, //allow rounded corners
-        icon: '',
+        icon: "",
         // TODO: add JSON file that stores note position and other properties
     });
 
-    window.loadFile('index.html');
+    window.loadFile("index.html");
   
-    window.webContents.openDevTools(); // DEBUG: Open the DevTools.
+    //window.webContents.openDevTools(); // DEBUG: Open the DevTools.
   
-    window.on('closed', function () { // Emitted when the window is closed.
+    window.on("closed", function () { // Emitted when the window is closed.
         window = null;
-        //pop window?
+        // TODO: pop window
     });
 
     if (notePath == null) {
@@ -59,7 +59,7 @@ function createWindow(notePath = null) {
         //notePath = path.join(notesPath, (windows.length + 1).toString() + ".txt"); // TODO: fix this!!! windows.length + 1 doesnt work!! if a note is closed it will screw up everything!!
     }
 
-    window.webContents.on('did-finish-load', () => {
+    window.webContents.on("did-finish-load", () => {
         window.webContents.send("loadFile", notePath); // send the note's path to the note
     });
 
@@ -102,17 +102,17 @@ ipcMain.on("newNote", function(){
     createWindow();
 });
 
-app.on('ready', function () { // called when Electron has finished initialization
+app.on("ready", function () { // called when Electron has finished initialization
     createWindows();
 });
 
-app.on('window-all-closed', function () { // Quit when all windows are closed.
-    if (process.platform !== 'darwin') { // OSX quit fix
+app.on("window-all-closed", function () { // Quit when all windows are closed.
+    if (process.platform !== "darwin") { // OSX quit fix
         app.quit();
     }
 });
 
-app.on('activate', function () {
+app.on("activate", function () {
     if (windows.length <= 0) { //if no existing notes found
         createWindows();
     }
