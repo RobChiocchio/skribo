@@ -8,22 +8,22 @@ const {Menu, MenuItem} = remote
 var notePath = "";
 
 const contextMenu = new Menu();
-contextMenu.append(new MenuItem({label: 'Undo', role: 'undo' }));
-contextMenu.append(new MenuItem({label: 'Redo', role: 'redo' }));
-contextMenu.append(new MenuItem({type: 'separator'}))
-contextMenu.append(new MenuItem({label: 'Cut', role: 'cut' }));
-contextMenu.append(new MenuItem({label: 'Copy', role: 'copy' }));
-contextMenu.append(new MenuItem({label: 'Paste', role: 'paste' }));
-contextMenu.append(new MenuItem({type: 'separator'}))
-contextMenu.append(new MenuItem({label: 'Select all', role: 'selectall' }));
-contextMenu.append(new MenuItem({type: 'separator'}))
-contextMenu.append(new MenuItem({label: 'Insert formula', click() { addFormula(); } })); // TODO: add KATEX and/or MathQuill support!
+contextMenu.append(new MenuItem({label: "Undo", role: "undo" }));
+contextMenu.append(new MenuItem({label: "Redo", role: "redo" }));
+contextMenu.append(new MenuItem({type: "separator"}))
+contextMenu.append(new MenuItem({label: "Cut", role: "cut" }));
+contextMenu.append(new MenuItem({label: "Copy", role: "copy" }));
+contextMenu.append(new MenuItem({label: "Paste", role: "paste" }));
+contextMenu.append(new MenuItem({type: "separator"}))
+contextMenu.append(new MenuItem({label: "Select all", role: "selectall" }));
+contextMenu.append(new MenuItem({type: "separator"}))
+contextMenu.append(new MenuItem({label: "Insert formula", click() { addFormula(); } })); // TODO: add KATEX and/or MathQuill support!
 
 var optionsMenu = new Menu();
-optionsMenu.append(new MenuItem({label: 'Pin note', click() { pinNote(); }, id: "isNotePinned", checked: false }));
-optionsMenu.append(new MenuItem({label: 'Close note', click() { closeNote(); }}));
-optionsMenu.append(new MenuItem({label: 'Close all', click() { closeAll(); }}));
-optionsMenu.append(new MenuItem({label: 'Delete note', click() { deleteNote() }}));
+optionsMenu.append(new MenuItem({label: "Pin note", click() { pinNote(); }, id: "isNotePinned", checked: false }));
+optionsMenu.append(new MenuItem({label: "Close note", click() { closeNote(); }}));
+optionsMenu.append(new MenuItem({label: "Close all", click() { closeAll(); }}));
+optionsMenu.append(new MenuItem({label: "Delete note", click() { deleteNote() }}));
 
 var quill = new Quill("#editor", {
     modules: {
@@ -61,10 +61,10 @@ ipcRenderer.on("loadFile", (event, arg) => {
     })
 });
 
-quill.on('text-change', function(delta, oldDelta, source) {
-    if (source == 'api') {
+quill.on("text-change", function(delta, oldDelta, source) {
+    if (source == "api") {
         console.log("An API call triggered this change.");
-    } else if (source == 'user') {
+    } else if (source == "user") {
         fs.writeFile(notePath, quill.getText(), function(err, data){ //should this be synchronous instead?
             if (err) {
                 return console.error(err);
@@ -119,7 +119,7 @@ function init() {
         newNote();
     });
 
-    window.addEventListener('contextmenu', (e) => {
+    window.addEventListener("contextmenu", (e) => {
         e.preventDefault()
         contextMenu.popup({window: remote.getCurrentWindow()})
     }, false)
