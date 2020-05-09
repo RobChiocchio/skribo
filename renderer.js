@@ -16,8 +16,8 @@ contextMenu.append(new MenuItem({label: "Copy", role: "copy" }));
 contextMenu.append(new MenuItem({label: "Paste", role: "paste" }));
 contextMenu.append(new MenuItem({type: "separator"}))
 contextMenu.append(new MenuItem({label: "Select all", role: "selectall" }));
-contextMenu.append(new MenuItem({type: "separator"}))
-contextMenu.append(new MenuItem({label: "Insert formula", click() { addFormula(); } })); // TODO: add KATEX and/or MathQuill support!
+//contextMenu.append(new MenuItem({type: "separator"}))
+//contextMenu.append(new MenuItem({label: "Insert formula", click() { addFormula(); } })); // TODO: add KATEX and/or MathQuill support!
 
 var optionsMenu = new Menu();
 optionsMenu.append(new MenuItem({label: "Pin note", click() { pinNote(); }, id: "isNotePinned", checked: false }));
@@ -29,7 +29,7 @@ var quill = new Quill("#editor", {
     modules: {
         syntax: false,
         formula: true,
-        toolbar: null
+        toolbar: "#titlebar"
     },
     formats: {
         bold: true,
@@ -37,7 +37,7 @@ var quill = new Quill("#editor", {
         link: false,
         formula: true
     },
-    theme: "bubble"
+    theme: "snow"
 });
 
 ipcRenderer.on("loadFile", (event, arg) => {

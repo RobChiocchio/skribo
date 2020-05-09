@@ -7,37 +7,42 @@ const ipcMain = electron.ipcMain;
 const fs = require("fs");
 const path = require("path");
 
-let notesPath = path.join(app.getPath("userData"), "notes");
-let configPath = path.join(app.getPath("userData"), "config.json");
-var windows = [];
-var windowNames = [];
+const extension = ".txt"; // TODO: use custom format?
 
-if (!fs.existsSync(notesPath)){ //if notesPath does not exist
-    fs.mkdirSync(notesPath, true); //create directory recursively
+let notesPath = path.join(app.getPath("userData"), "notes");
+let iconPath = path.join(__dirname, "icon-placeholder.ico"); // process.resourcesPath
+console.log(iconPath);
+let configPath = path.join(app.getPath("userData"), "config.json");
+let config = {};
+let windows = [];
+let windowNames = [];
+let tray = null;
+
+const configDefault = {
+    "showOnTaskbar": true,
+    "notes": []
 }
 
+const noteDefaults = {
+    width: 300,
+    height: 250,
+    x: 0,
+    y: 0,
+    alwaysOnTop: false
+}
+
+if (!fs.existsSync(notesPath)){ //if notes directory does not exist
+    fs.mkdirSync(notesPath, true); //create directory
+}
+
+if (fs.existsSync(configPath)){ //if config file does not exist
+    let configData = JSON.stringify(configDefault);
+    fs.writeFileSync(configPath, configData);
+}
+
+config = fs.readFileSync(configPath); // TODO: catch errors AND ACTUALLY USE CONFIG
+
 function createWindow(notePath = null) {
-    let window = new BrowserWindow({
-        width: 300,
-        height: 250,
-        minWidth: 150,
-        minHeight: 125,
-        frame: false, // remove frame from windows apps
-        titleBarStyle: "hidden", // hide mac titlebar
-        transparent: true, //allow rounded corners
-        icon: "",
-        // TODO: add JSON file that stores note position and other properties
-    });
-
-    window.loadFile("index.html");
-  
-    //window.webContents.openDevTools(); // DEBUG: Open the DevTools.
-  
-    window.on("closed", function () { // Emitted when the window is closed.
-        window = null;
-        // TODO: pop window
-    });
-
     if (notePath == null) {
         let newNoteID = 1;
         if (windowNames.length > 0) {
@@ -53,11 +58,48 @@ function createWindow(notePath = null) {
         do {
             ++newNoteID;
             console.log(newNoteID.toString());
-            notePath = path.join(notesPath, newNoteID.toString() + ".txt");
+            notePath = path.join(notesPath, newNoteID.toString() + extension);
             console.log(notesPath);
         } while (fs.existsSync(notePath))
-        //notePath = path.join(notesPath, (windows.length + 1).toString() + ".txt"); // TODO: fix this!!! windows.length + 1 doesnt work!! if a note is closed it will screw up everything!!
     }
+
+    let window = new BrowserWindow({
+        width: 300,
+        height: 250,
+        minWidth: 150,
+        minHeight: 125,
+        frame: false, // remove frame from windows apps
+        titleBarStyle: "hidden", // hide mac titlebar
+        transparent: true, //allow rounded corners
+        skipTaskbar: true, // dont show on taskbar
+        icon: "",
+        // TODO: add JSON file that stores note position and other properties
+    });
+
+    window.loadFile("index.html");
+  
+    //window.webContents.openDevTools(); // DEBUG: Open the DevTools.
+  
+    window.on("closed", function () { // Emitted when the window is closed
+        window = null;
+        // TODO: save data to config file
+        // TODO: pop window
+    });
+
+    window.on("move", function () { // Emitted when the window is moved // TODO: can I make only call when its DONE moving?
+        let position = window.getPosition();
+        // TODO: write data to conifg var
+    });
+
+    window.on("resize", function () { // Emitted when the window is resized // TODO: can I make only call when its DONE resizing?
+        let size = window.getSize();
+        // TODO: write data to conifg var
+    })
+
+    window.on("always-on-top-changed", function () { // Emitted when the window is pinned/unpinned
+        let alwaysOnTop = window.isAlwaysOnTop();
+        // TODO: write data to conifg var
+    });
 
     window.webContents.on("did-finish-load", () => {
         window.webContents.send("loadFile", notePath); // send the note's path to the note
@@ -74,10 +116,10 @@ function createWindows() { //initialize
             createWindow();
         } else {
             files.forEach(file => {
-                createWindow(path.join(notesPath, file));
                 let noteID = Number(path.basename(file).split('.')[0]); // TODO: find a better way to do this?
+                createWindow(path.join(notesPath, file));
                 if (!isNaN(noteID)) {
-                    windowNames.push(noteID);
+                    windowNames.push(noteID); // TODO: rework this system
                 }
             });
         }
@@ -104,6 +146,10 @@ ipcMain.on("newNote", function(){
 
 app.on("ready", function () { // called when Electron has finished initialization
     createWindows();
+
+    tray = new electron.Tray(iconPath);
+    tray.setToolTip("skribo");
+    tray.setContextMenu(new electron.Menu()); // TODO: make a tray menu
 });
 
 app.on("window-all-closed", function () { // Quit when all windows are closed.

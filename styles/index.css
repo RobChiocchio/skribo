@@ -12,7 +12,8 @@ html, body {
 
 body {
 	position: static;
-	background: #353b48;
+    background: #353b48;
+    background: linear-gradient(0deg, #2f343e 0%, #353b48 100%);
 	color: #7f8fa6;
 }
 
@@ -31,7 +32,8 @@ body {
 	-webkit-user-select: none;
 	-webkit-app-region: drag;
 	height: 16px;
-	padding: 0px;
+    padding: 0px;
+    border: none;
 	margin: 0px;
 	overflow: hidden;
 }
@@ -57,4 +59,8 @@ body {
 
 #titlebar-buttons button:hover {
 	background: #2f3640;
+}
+
+.ql-container.ql-snow {
+    border: none;
 }
