@@ -24,10 +24,11 @@
   },
   "homepage": "https://github.com/robethx/skribo#readme",
   "dependencies": {
-    "katex": "^0.11.1",
+    "katex": "^0.15.3",
     "quill": "^1.3.7"
   },
   "devDependencies": {
-    "electron": "3.0.9"
+    "electron": "^18.0.0",
+    "electron-builder": "^22.14.13"
   }
 }
