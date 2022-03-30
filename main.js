@@ -35,7 +35,7 @@ if (!fs.existsSync(notesPath)){ //if notes directory does not exist
     fs.mkdirSync(notesPath, true); //create directory
 }
 
-if (fs.existsSync(configPath)){ //if config file does not exist
+if (!fs.existsSync(configPath)){ //if config file does not exist
     let configData = JSON.stringify(configDefault);
     fs.writeFileSync(configPath, configData);
 }
